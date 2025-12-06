@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 과학기술문화 컨퍼런스</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            width: 100%;
+        }
+        body {
+            font-family: "Montserrat", -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+            overflow-x: hidden;
+        }
+        #app a {
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        /* 3D Canvas Background */
+        #canvas {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1;
+        }
+        h1, h2, p {
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 1);
+            line-height: 100%;
+            user-select: none;
+        }
+        h1 {
+            font-size: 80px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-size: 60px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        /* Content Sections */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 60px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 80px;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 1);
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .info-card {
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .info-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Program List */
+        .program-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .program-item {
+            padding: 40px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+        }
+
+        .program-time {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .program-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .program-desc {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Speaker Grid */
+        .speaker-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 50px;
+        }
+
+        .speaker-card {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+        }
+
+        .speaker-photo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .speaker-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .speaker-title {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            padding: 25px 60px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 60px 40px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 50px; }
+            h2 { font-size: 36px; }
+            .section-title { font-size: 36px; }
+            .info-grid,
+            .speaker-grid {
+                grid-template-columns: 1fr;
+            }
+            section { padding: 80px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 3D Canvas Background -->
+        <canvas id="canvas"></canvas>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>Conference</h1>
+            <h2>2025</h2>
+            <a href="#">과학기술문화 컨퍼런스</a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Info Section -->
+            <section>
+                <div class="container">
+                    <h2 class="section-title">Event Info</h2>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-label">Date</div>
+                            <div class="info-value">2025. 00. 00</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Location</div>
+                            <div class="info-value">서울 OO홀</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Fee</div>
+                            <div class="info-value">무료</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Section -->
+            <section>
+                <div class="container">
+                    <h2 class="section-title">Program</h2>
+                    <div class="program-list">
+                        <div class="program-item">
+                            <div class="program-time">10:00 - 10:30</div>
+                            <div class="program-title">개회식 및 환영사</div>
+                            <div class="program-desc">2025 과학기술문화 컨퍼런스를 시작하며</div>
+                        </div>
+                        <div class="program-item">
+                            <div class="program-time">10:30 - 12:00</div>
+                            <div class="program-title">기조연설: 미래 기술의 방향</div>
+                            <div class="program-desc">혁신적인 과학기술이 만들어갈 미래 사회</div>
+                        </div>
+                        <div class="program-item">
+                            <div class="program-time">13:00 - 15:00</div>
+                            <div class="program-title">세션 1: 과학기술과 문화의 융합</div>
+                            <div class="program-desc">기술이 문화를 만나 창출하는 새로운 가치</div>
+                        </div>
+                        <div class="program-item">
+                            <div class="program-time">15:00 - 17:00</div>
+                            <div class="program-title">세션 2: 지속가능한 미래</div>
+                            <div class="program-desc">과학기술을 통한 지속가능성의 실현</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Speaker Section -->
+            <section>
+                <div class="container">
+                    <h2 class="section-title">Speakers</h2>
+                    <div class="speaker-grid">
+                        <div class="speaker-card">
+                            <div class="speaker-photo">연사 사진</div>
+                            <div class="speaker-name">홍길동</div>
+                            <div class="speaker-title">OO대학교 교수</div>
+                        </div>
+                        <div class="speaker-card">
+                            <div class="speaker-photo">연사 사진</div>
+                            <div class="speaker-name">김철수</div>
+                            <div class="speaker-title">OO연구소 소장</div>
+                        </div>
+                        <div class="speaker-card">
+                            <div class="speaker-photo">연사 사진</div>
+                            <div class="speaker-name">이영희</div>
+                            <div class="speaker-title">OO기업 대표</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section style="min-height: 60vh;">
+                <div class="container" style="text-align: center;">
+                    <h2 class="section-title">Join Us</h2>
+                    <a href="#" class="cta-button">사전 등록하기</a>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer>
+                <p>주최: 과학기술문화재단</p>
+                <p>문의: contact@scienceconf2025.org | 02-1234-5678</p>
+                <p style="margin-top: 20px;">&copy; 2025 과학기술문화 컨퍼런스. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module">
+        import TubesCursor from "https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js"
+        const app = TubesCursor(document.getElementById('canvas'), {
+            tubes: {
+                colors: ["#f967fb", "#53bc28", "#6958d5"],
+                lights: {
+                    intensity: 200,
+                    colors: ["#83f36e", "#fe8a2e", "#ff008a", "#60aed5"]
+                }
+            }
+        })
+        document.body.addEventListener('click', () => {
+            const colors = randomColors(3)
+            const lightsColors = randomColors(4)
+            app.tubes.setColors(colors)
+            app.tubes.setLightsColors(lightsColors)
+        })
+        function randomColors (count) {
+            return new Array(count)
+                .fill(0)
+                .map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'))
+        }
+    </script>
+</body>
+</html>
