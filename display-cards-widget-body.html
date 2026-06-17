@@ -1,0 +1,205 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<style>
+#brand-cards-root, #brand-cards-root *, #brand-cards-root *::before, #brand-cards-root *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#brand-cards-root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+  display: flex;
+  min-height: 400px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+#brand-cards-root .brand-cards-wrap {
+  width: 100%;
+  max-width: 48rem;
+}
+
+#brand-cards-root .brand-cards-stack {
+  display: grid;
+  grid-template-areas: "stack";
+  place-items: center;
+  opacity: 0;
+  animation: brand-cards-fade-in 0.7s ease-out forwards;
+}
+
+@keyframes brand-cards-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#brand-cards-root .brand-cards-card {
+  grid-area: stack;
+  position: relative;
+  display: flex;
+  height: 9rem;
+  width: 22rem;
+  max-width: 90vw;
+  transform: skewY(-8deg);
+  user-select: none;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0.75rem;
+  border: 2px solid #e5e7eb;
+  background: rgba(243, 244, 246, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 12px 16px;
+  transition: all 0.7s;
+  filter: grayscale(100%);
+}
+
+#brand-cards-root .brand-cards-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  outline: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.5);
+  transition: opacity 0.7s;
+  pointer-events: none;
+}
+
+#brand-cards-root .brand-cards-card::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -5%;
+  height: 110%;
+  width: 20rem;
+  background: linear-gradient(to left, #ffffff, transparent);
+  pointer-events: none;
+}
+
+#brand-cards-root .brand-cards-card:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: #f3f4f6;
+  filter: grayscale(0%);
+}
+
+#brand-cards-root .brand-cards-card:hover::before {
+  opacity: 0;
+}
+
+#brand-cards-root .brand-cards-card-1 {
+  z-index: 1;
+}
+#brand-cards-root .brand-cards-card-1:hover {
+  transform: skewY(-8deg) translateY(-40px);
+}
+
+#brand-cards-root .brand-cards-card-2 {
+  z-index: 2;
+  transform: skewY(-8deg) translate(64px, 40px);
+}
+#brand-cards-root .brand-cards-card-2:hover {
+  transform: skewY(-8deg) translate(64px, 36px);
+}
+
+#brand-cards-root .brand-cards-card-3 {
+  z-index: 3;
+  transform: skewY(-8deg) translate(128px, 80px);
+  filter: none;
+}
+#brand-cards-root .brand-cards-card-3::before {
+  display: none;
+}
+#brand-cards-root .brand-cards-card-3:hover {
+  transform: skewY(-8deg) translate(128px, 40px);
+}
+
+#brand-cards-root .brand-cards-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#brand-cards-root .brand-cards-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background: #1e3a8a;
+  color: #93c5fd;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+#brand-cards-root .brand-cards-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #3b82f6;
+}
+
+#brand-cards-root .brand-cards-desc {
+  font-size: 1.125rem;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#brand-cards-root .brand-cards-date {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  #brand-cards-root .brand-cards-card {
+    width: 18rem;
+  }
+  #brand-cards-root .brand-cards-card-2 {
+    transform: skewY(-8deg) translate(32px, 32px);
+  }
+  #brand-cards-root .brand-cards-card-2:hover {
+    transform: skewY(-8deg) translate(32px, 28px);
+  }
+  #brand-cards-root .brand-cards-card-3 {
+    transform: skewY(-8deg) translate(64px, 64px);
+  }
+  #brand-cards-root .brand-cards-card-3:hover {
+    transform: skewY(-8deg) translate(64px, 32px);
+  }
+}
+</style>
+
+<div id="brand-cards-root">
+  <div class="brand-cards-wrap">
+    <div class="brand-cards-stack">
+      <div class="brand-cards-card brand-cards-card-1">
+        <div class="brand-cards-row">
+          <span class="brand-cards-icon-badge"><i class="fa-solid fa-sparkles"></i></span>
+          <p class="brand-cards-title">추천</p>
+        </div>
+        <p class="brand-cards-desc">놀라운 콘텐츠를 만나보세요</p>
+        <p class="brand-cards-date">방금 전</p>
+      </div>
+      <div class="brand-cards-card brand-cards-card-2">
+        <div class="brand-cards-row">
+          <span class="brand-cards-icon-badge"><i class="fa-solid fa-sparkles"></i></span>
+          <p class="brand-cards-title">인기</p>
+        </div>
+        <p class="brand-cards-desc">이번 주 가장 주목받는 소식</p>
+        <p class="brand-cards-date">2일 전</p>
+      </div>
+      <div class="brand-cards-card brand-cards-card-3">
+        <div class="brand-cards-row">
+          <span class="brand-cards-icon-badge"><i class="fa-solid fa-sparkles"></i></span>
+          <p class="brand-cards-title">신규</p>
+        </div>
+        <p class="brand-cards-desc">최신 업데이트와 새로운 기능</p>
+        <p class="brand-cards-date">오늘</p>
+      </div>
+    </div>
+  </div>
+</div>
