@@ -2,7 +2,7 @@
 #scrollcard-root, #scrollcard-root *, #scrollcard-root *::before, #scrollcard-root *::after { margin: 0; padding: 0; box-sizing: border-box; }
 #scrollcard-root {
   font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #scrollcard-root .scroll-container {
@@ -139,11 +139,31 @@
     return start + (end - start) * progress;
   }
 
+  // 아임웹 코드위젯은 보통 같은 도메인의 iframe 안에서 렌더링되어,
+  // window.scrollY/innerHeight가 실제로 스크롤되는 바깥 페이지가 아닌
+  // iframe 자체를 기준으로 계산되는 문제가 있다. 가장 바깥 window까지
+  // iframe 오프셋을 누적해 실제 화면 기준 위치로 보정한다.
+  function getOuterMetrics() {
+    let win = window;
+    let frameOffsetTop = 0;
+    try {
+      while (win.frameElement && win.parent && win.parent !== win) {
+        frameOffsetTop += win.frameElement.getBoundingClientRect().top;
+        win = win.parent;
+      }
+    } catch (e) {
+      // cross-origin iframe: 접근 불가, 로컬 window로 대체
+      return { win: window, frameOffsetTop: 0 };
+    }
+    return { win, frameOffsetTop };
+  }
+
   function update() {
+    const { win: outerWin, frameOffsetTop } = getOuterMetrics();
     const rect = container.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+    const viewportHeight = outerWin.innerHeight;
     const total = rect.height + viewportHeight;
-    const scrolled = viewportHeight - rect.top;
+    const scrolled = viewportHeight - (rect.top + frameOffsetTop);
     const progress = clamp(scrolled / total, 0, 1);
 
     const scaleRange = isMobile ? [0.7, 0.9] : [1.05, 1];
