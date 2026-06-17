@@ -60,6 +60,79 @@
             text-transform: uppercase;
         }
 
+        /* Scroll Animation (container-scroll-animation style) */
+        .scroll-animation-container {
+            height: 60rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 8px 80px;
+        }
+
+        .scroll-animation-inner {
+            padding: 40px 0 160px;
+            width: 100%;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .scroll-header {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            will-change: transform;
+        }
+
+        .scroll-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            text-transform: none;
+        }
+
+        .scroll-card {
+            max-width: 900px;
+            margin: -48px auto 0;
+            height: 480px;
+            width: 100%;
+            border: 4px solid #6c6c6c;
+            padding: 8px;
+            background: #222222;
+            border-radius: 30px;
+            box-shadow:
+                0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042,
+                0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003;
+            will-change: transform;
+        }
+
+        .scroll-card-inner {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-card-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-animation-container {
+                height: 80rem;
+                padding: 8px 16px;
+            }
+            .scroll-card {
+                height: 360px;
+            }
+        }
+
         /* Content Sections */
         .content {
             position: relative;
@@ -254,6 +327,20 @@
             <a href="#">과학기술문화 컨퍼런스</a>
         </div>
 
+        <!-- Scroll Animation Showcase -->
+        <div class="scroll-animation-container" id="scrollAnimContainer">
+            <div class="scroll-animation-inner">
+                <div class="scroll-header" id="scrollHeader">
+                    <h2>한눈에 보는<br>과학기술의 미래</h2>
+                </div>
+                <div class="scroll-card" id="scrollCard">
+                    <div class="scroll-card-inner">
+                        <img src="images/free-animated-icon-info-15578675.gif" alt="conference highlight">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Content -->
         <div class="content">
             <!-- Info Section -->
@@ -369,6 +456,51 @@
                 .fill(0)
                 .map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'))
         }
+    </script>
+
+    <script>
+        // Vanilla JS re-implementation of the framer-motion ContainerScroll effect:
+        // tracks scroll progress through the container and maps it to rotateX/scale/translateY.
+        (function () {
+            const container = document.getElementById('scrollAnimContainer');
+            const header = document.getElementById('scrollHeader');
+            const card = document.getElementById('scrollCard');
+            if (!container || !header || !card) return;
+
+            let isMobile = window.innerWidth <= 768;
+            window.addEventListener('resize', () => {
+                isMobile = window.innerWidth <= 768;
+            });
+
+            function clamp(value, min, max) {
+                return Math.min(Math.max(value, min), max);
+            }
+
+            function lerp(start, end, progress) {
+                return start + (end - start) * progress;
+            }
+
+            function update() {
+                const rect = container.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                // progress: 0 when container top enters viewport bottom, 1 when container bottom reaches viewport top
+                const total = rect.height + viewportHeight;
+                const scrolled = viewportHeight - rect.top;
+                const progress = clamp(scrolled / total, 0, 1);
+
+                const scaleRange = isMobile ? [0.7, 0.9] : [1.05, 1];
+                const rotate = lerp(20, 0, progress);
+                const scale = lerp(scaleRange[0], scaleRange[1], progress);
+                const translate = lerp(0, -100, progress);
+
+                header.style.transform = `translateY(${translate}px)`;
+                card.style.transform = `rotateX(${rotate}deg) scale(${scale})`;
+
+                requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+        })();
     </script>
 </body>
 </html>
