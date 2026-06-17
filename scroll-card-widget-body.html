@@ -1,0 +1,162 @@
+<style>
+#scrollcard-root, #scrollcard-root *, #scrollcard-root *::before, #scrollcard-root *::after { margin: 0; padding: 0; box-sizing: border-box; }
+#scrollcard-root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+  overflow: hidden;
+}
+
+#scrollcard-root .scroll-container {
+  height: 60rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8px 80px;
+}
+
+#scrollcard-root .scroll-inner {
+  padding: 40px 0 160px;
+  width: 100%;
+  position: relative;
+  perspective: 1000px;
+}
+
+#scrollcard-root .scroll-header {
+  max-width: 56rem;
+  margin: 0 auto;
+  text-align: center;
+  will-change: transform;
+}
+
+#scrollcard-root .scroll-header .eyebrow {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+#scrollcard-root .scroll-header h1 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #111;
+  line-height: 1.2;
+}
+
+#scrollcard-root .scroll-header .highlight {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  line-height: 1;
+  display: block;
+}
+
+#scrollcard-root .scroll-card {
+  max-width: 64rem;
+  margin: -48px auto 0;
+  height: 30rem;
+  width: 100%;
+  border: 4px solid #6c6c6c;
+  padding: 8px;
+  background: #222222;
+  border-radius: 30px;
+  box-shadow:
+    0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042,
+    0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003;
+  will-change: transform;
+}
+
+#scrollcard-root .scroll-card-inner {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #f3f4f6;
+}
+
+#scrollcard-root .scroll-card-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  #scrollcard-root .scroll-card {
+    height: 40rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #scrollcard-root .scroll-container {
+    height: 80rem;
+    padding: 8px 16px;
+  }
+  #scrollcard-root .scroll-header h1 { font-size: 1.5rem; }
+  #scrollcard-root .scroll-header .highlight { font-size: 2.25rem; }
+}
+</style>
+
+<div id="scrollcard-root">
+  <div class="scroll-container" id="scrollCardContainer">
+    <div class="scroll-inner">
+      <div class="scroll-header" id="scrollCardHeader">
+        <p class="eyebrow">우리가 추구하는 가치</p>
+        <h1>
+          스크롤만으로 펼쳐지는
+          <span class="highlight">생생한 현장의 순간들</span>
+        </h1>
+      </div>
+      <div class="scroll-card" id="scrollCardCard">
+        <div class="scroll-card-inner">
+          <img
+            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&q=80"
+            alt="컨퍼런스 현장 사진"
+            draggable="false"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('scrollcard-root');
+  const container = root.querySelector('#scrollCardContainer');
+  const header = root.querySelector('#scrollCardHeader');
+  const card = root.querySelector('#scrollCardCard');
+
+  let isMobile = window.matchMedia('(max-width: 768px)').matches;
+  window.addEventListener('resize', () => {
+    isMobile = window.matchMedia('(max-width: 768px)').matches;
+  });
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function lerp(start, end, progress) {
+    return start + (end - start) * progress;
+  }
+
+  function update() {
+    const rect = container.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const total = rect.height + viewportHeight;
+    const scrolled = viewportHeight - rect.top;
+    const progress = clamp(scrolled / total, 0, 1);
+
+    const scaleRange = isMobile ? [0.7, 0.9] : [1.05, 1];
+    const rotate = lerp(20, 0, progress);
+    const scale = lerp(scaleRange[0], scaleRange[1], progress);
+    const translate = lerp(0, -100, progress);
+
+    header.style.transform = `translateY(${translate}px)`;
+    card.style.transform = `rotateX(${rotate}deg) scale(${scale})`;
+
+    requestAnimationFrame(update);
+  }
+
+  requestAnimationFrame(update);
+})();
+</script>
