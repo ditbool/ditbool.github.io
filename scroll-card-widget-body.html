@@ -158,6 +158,13 @@
     return { win, frameOffsetTop };
   }
 
+  // 화면에 바로 보이는 디버그 배지: 콘솔을 열 필요 없이 스크립트 동작 여부와
+  // 계산값을 눈으로 확인하기 위한 용도. 문제 해결 후 제거할 것.
+  const debugBadge = document.createElement('div');
+  debugBadge.style.cssText = 'position:fixed;top:8px;left:8px;z-index:99999;background:rgba(0,0,0,0.85);color:#0f0;font:12px monospace;padding:8px 10px;border-radius:6px;white-space:pre;pointer-events:none;';
+  debugBadge.textContent = 'scrollcard: 초기화중...';
+  document.body.appendChild(debugBadge);
+
   function update() {
     const { win: outerWin, frameOffsetTop } = getOuterMetrics();
     const rect = container.getBoundingClientRect();
@@ -173,6 +180,14 @@
 
     header.style.transform = `translateY(${translate}px)`;
     card.style.transform = `rotateX(${rotate}deg) scale(${scale})`;
+
+    debugBadge.textContent =
+      'scrollcard 실행중\n' +
+      'iframe여부: ' + (outerWin !== window) + '\n' +
+      'rect.top: ' + Math.round(rect.top) + '\n' +
+      'frameOffsetTop: ' + Math.round(frameOffsetTop) + '\n' +
+      'viewportHeight: ' + viewportHeight + '\n' +
+      'progress: ' + progress.toFixed(3);
 
     requestAnimationFrame(update);
   }
